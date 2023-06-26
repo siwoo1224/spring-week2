@@ -26,8 +26,8 @@ public class BoardController {
      * @param requestDto
      * @return
      */
-    @PostMapping("/boardCreate")
-    public BoardResponseDto boardCreate(@RequestBody BoardRequestDto requestDto) {
+    @PostMapping("/board")
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto) {
         return boardService.createBoard(requestDto);
     }
 
@@ -36,8 +36,8 @@ public class BoardController {
      * @param id
      * @return
      */
-    @GetMapping("/boardDetail/{id}")
-    public BoardResponseDto board(@PathVariable Long id) {
+    @GetMapping("/board/{id}")
+    public BoardResponseDto getBoard(@PathVariable Long id) {
         // Map To List
 //        return new BoardResponseDto(boardList.get(id));
         return boardService.getBoard(id);
@@ -47,8 +47,8 @@ public class BoardController {
      * 게시판 글 리스트
      * @return
      */
-    @GetMapping("/boardList")
-    public List<BoardResponseDto> boardList() {
+    @GetMapping("/board")
+    public List<BoardResponseDto> getBoardlist() {
         // Map To List
 //        return boardList.values().stream().map(BoardResponseDto::new).toList();
         return boardService.getBoardlist();
@@ -60,8 +60,8 @@ public class BoardController {
      * @param requestDto
      * @return
      */
-    @PutMapping("/boardUpdate/{id}")
-    public Long boardUpdate(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
+    @PutMapping("/board/{id}")
+    public Long updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
         return boardService.updateBoard(id, requestDto);
     }
 
@@ -71,9 +71,8 @@ public class BoardController {
      * @param requestDto
      * @return
      */
-    @DeleteMapping("/boardDelete/{id}")
-    public Long boardDelete(@PathVariable Long id, @RequestBody  BoardRequestDto requestDto) {
-
+    @DeleteMapping("/board/{id}")
+    public Long deleteBoard(@PathVariable Long id, @RequestBody  BoardRequestDto requestDto) {
         return boardService.deleteBoard(id, requestDto);
     }
 }
