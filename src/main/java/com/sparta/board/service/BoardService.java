@@ -60,11 +60,12 @@ public class BoardService {
      */
     @Transactional
     public Long updateBoard(Long id, BoardRequestDto requestDto) {
-        // 해당 메모가 DB에 존재하는지 확인
         Board board = findBoard(id);
-
-        // memo 내용 수정
-        board.update(requestDto);
+        if(board.getPasswd().equals(requestDto.getPasswd())){
+            board.update(requestDto);
+        }else{
+            throw new IllegalArgumentException("선택한 글이 존재하지 않습니다.");
+        }
 
         return id;
     }
@@ -75,19 +76,21 @@ public class BoardService {
      * @param requestDto
      * @return
      */
+    @Transactional
     public Long deleteBoard(Long id, BoardRequestDto requestDto) {
-        // 해당 메모가 DB에 존재하는지 확인
         Board board = findBoard(id);
-
-        // memo 삭제
-        boardRepository.delete(board);
+        if(board.getPasswd().equals(requestDto.getPasswd())){
+            boardRepository.delete(board);
+        }else{
+            throw  new IllegalArgumentException("선택한 글이 존재하지 않습니다.");
+        }
 
         return id;
     }
 
     private Board findBoard(Long id){
         return boardRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 메모는 존재하지 않습니다.")
+                new IllegalArgumentException("선택한 글이 존재하지 않습니다.")
         );
     }
 }

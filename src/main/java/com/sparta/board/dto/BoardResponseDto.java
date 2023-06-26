@@ -8,13 +8,13 @@ import java.util.Date;
 
 @Getter
 public class BoardResponseDto {
-    private Long id;
-    private String title;
-    private String name;
-    private String contents;
-    private String passwd;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private Long id;                    //seq
+    private String title;               //제목
+    private String name;                //이름
+    private String contents;            //내용
+    private String passwd;              //비밀번호
+    private LocalDateTime createdAt;    //생성날짜
+    private LocalDateTime modifiedAt;   //수정날짜
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();

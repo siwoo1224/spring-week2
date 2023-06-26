@@ -6,8 +6,8 @@ import java.util.Date;
 
 @Getter
 public class BoardRequestDto {
-    private String title;
-    private String name;
-    private String contents;
-    private String passwd;
+    private String title;       //제목
+    private String name;        //이름
+    private String contents;    //내용
+    private String passwd;      //비밀번호
 }
