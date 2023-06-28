@@ -4,7 +4,6 @@ import com.sparta.board.entity.Board;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 public class BoardResponseDto {
@@ -12,7 +11,6 @@ public class BoardResponseDto {
     private String title;               //제목
     private String name;                //이름
     private String contents;            //내용
-    private String passwd;              //비밀번호
     private LocalDateTime createdAt;    //생성날짜
     private LocalDateTime modifiedAt;   //수정날짜
 
@@ -21,7 +19,6 @@ public class BoardResponseDto {
         this.title = board.getTitle();
         this.name = board.getName();
         this.contents = board.getContents();
-        this.passwd = board.getPasswd();
         this.createdAt = board.getCreatedAt();
         this.modifiedAt = board.getModifiedAt();
     }

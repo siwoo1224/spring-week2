@@ -1,32 +1,44 @@
 package com.sparta.board.service;
 
+import com.sparta.auth.entity.User;
+import com.sparta.auth.jwt.JwtUtil;
+import com.sparta.auth.security.UserDetailsImpl;
 import com.sparta.board.dto.BoardRequestDto;
 import com.sparta.board.dto.BoardResponseDto;
 import com.sparta.board.entity.Board;
 import com.sparta.board.repository.BoardRepository;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BoardService {
 
     private BoardRepository boardRepository;
 
-    public BoardService(BoardRepository boardRepository) {
+    private JwtUtil jwtUtil;
+
+    private HttpServletRequest req;
+
+    public BoardService(BoardRepository boardRepository,JwtUtil jwtUtil) {
         this.boardRepository = boardRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     /**
-     * 게시판 글 생성
+     * 게시판 글생성
      * @param requestDto
      * @return
      */
     public BoardResponseDto createBoard(BoardRequestDto requestDto) {
+        Claims info = getClaims();
+
         // RequestDto -> Entity
         Board board = new Board(requestDto);
+        board.setName(info.getSubject());
         // DB 저장
         Board saveBoard = boardRepository.save(board);
         // Entity -> ResponseDto
@@ -46,6 +58,7 @@ public class BoardService {
 
     /**
      * 게시판 글 리스트
+     *
      * @return
      */
     public List<BoardResponseDto> getBoardlist() {
@@ -60,37 +73,61 @@ public class BoardService {
      */
     @Transactional
     public Long updateBoard(Long id, BoardRequestDto requestDto) {
+        Claims info = getClaims();
+
+        // 글 존재 유무
         Board board = findBoard(id);
-        if(board.getPasswd().equals(requestDto.getPasswd())){
+        if (info.getSubject().equals(board.getName())) {
             board.update(requestDto);
         }else{
-            throw new IllegalArgumentException("선택한 글이 존재하지 않습니다.");
+            throw new IllegalArgumentException("작성자만 수정할 수 있다");
         }
 
         return id;
     }
 
     /**
-     * 게시판 글 삭제
+     *
      * @param id
-     * @param requestDto
      * @return
      */
-    @Transactional
-    public Long deleteBoard(Long id, BoardRequestDto requestDto) {
+    public Long deleteBoard(Long id) {
+        Claims info = getClaims();
+
+        // 글 존재 유무
         Board board = findBoard(id);
-        if(board.getPasswd().equals(requestDto.getPasswd())){
+        if (info.getSubject().equals(board.getName())) {
             boardRepository.delete(board);
         }else{
-            throw  new IllegalArgumentException("선택한 글이 존재하지 않습니다.");
+            throw new IllegalArgumentException("작성자만 수정할 수 있다");
         }
-
         return id;
     }
 
+    /**
+     * 글 존재 유무
+     * @param id
+     * @return
+     */
     private Board findBoard(Long id){
         return boardRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 글이 존재하지 않습니다.")
         );
+    }
+
+    /**
+     * 토큰 유효성 검증
+     * @return
+     */
+    private Claims getClaims() {
+        String tokenFromRequest = jwtUtil.getTokenFromRequest(req);
+        tokenFromRequest = jwtUtil.substringToken(tokenFromRequest);
+        // 토큰 검증
+        if (!jwtUtil.validateToken(tokenFromRequest)) {
+            throw new IllegalArgumentException("Token Error");
+        }
+        // 토큰에서 사용자 정보 가져오기
+        Claims info = jwtUtil.getUserInfoFromToken(tokenFromRequest);
+        return info;
     }
 }

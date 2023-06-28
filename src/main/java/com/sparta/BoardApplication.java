@@ -1,10 +1,10 @@
-package com.sparta.board;
+package com.sparta;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableJpaAuditing // Auditing 사용하기 위해서는 여기에 추가
+@EnableJpaAuditing
 @SpringBootApplication
 public class BoardApplication {
 

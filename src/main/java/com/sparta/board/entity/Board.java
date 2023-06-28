@@ -1,5 +1,6 @@
 package com.sparta.board.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.board.dto.BoardRequestDto;
 import com.sparta.board.repository.Timestamped;
 import jakarta.persistence.*;
@@ -24,14 +25,11 @@ public class Board  extends Timestamped {
     private String name;
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
-    @Column(name = "passwd", nullable = false)
-    private String passwd;
 
     public Board(BoardRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.name = requestDto.getName();
         this.contents = requestDto.getContents();
-        this.passwd = requestDto.getPasswd();
     }
 
     public void update(BoardRequestDto requestDto) {
