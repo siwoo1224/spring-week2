@@ -59,7 +59,7 @@
 ![img.png](img.png)
 
 # API 명세서
-![img_1.png](img_1.png)
+![img_2.png](img_2.png)
 
 <aside>
 ❓ Why: 과제 제출시에는 아래 질문을 고민해보고 답변을 함께 제출해주세요.
