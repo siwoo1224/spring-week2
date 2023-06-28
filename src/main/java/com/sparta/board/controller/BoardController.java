@@ -1,11 +1,9 @@
 package com.sparta.board.controller;
 
-import com.sparta.auth.security.UserDetailsImpl;
 import com.sparta.board.dto.BoardRequestDto;
 import com.sparta.board.dto.BoardResponseDto;
 import com.sparta.board.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +14,7 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, HttpServletRequest req) {
         this.boardService = boardService;
     }
 
@@ -26,9 +24,7 @@ public class BoardController {
      * @return
      */
     @PostMapping("/board")
-    public BoardResponseDto createBoard(HttpServletRequest req,
-                                        @RequestBody BoardRequestDto requestDto,
-                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto) {
         return boardService.createBoard(requestDto);
     }
     /**

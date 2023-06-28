@@ -23,9 +23,10 @@ public class BoardService {
 
     private HttpServletRequest req;
 
-    public BoardService(BoardRepository boardRepository,JwtUtil jwtUtil) {
+    public BoardService(BoardRepository boardRepository,JwtUtil jwtUtil, HttpServletRequest req) {
         this.boardRepository = boardRepository;
         this.jwtUtil = jwtUtil;
+        this.req = req;
     }
 
     /**
@@ -34,7 +35,7 @@ public class BoardService {
      * @return
      */
     public BoardResponseDto createBoard(BoardRequestDto requestDto) {
-        Claims info = getClaims();
+        Claims info = getClaims(req);
 
         // RequestDto -> Entity
         Board board = new Board(requestDto);
@@ -73,7 +74,7 @@ public class BoardService {
      */
     @Transactional
     public Long updateBoard(Long id, BoardRequestDto requestDto) {
-        Claims info = getClaims();
+        Claims info = getClaims(req);
 
         // 글 존재 유무
         Board board = findBoard(id);
@@ -92,7 +93,7 @@ public class BoardService {
      * @return
      */
     public Long deleteBoard(Long id) {
-        Claims info = getClaims();
+        Claims info = getClaims(req);
 
         // 글 존재 유무
         Board board = findBoard(id);
@@ -119,8 +120,8 @@ public class BoardService {
      * 토큰 유효성 검증
      * @return
      */
-    private Claims getClaims() {
-        String tokenFromRequest = jwtUtil.getTokenFromRequest(req);
+    private Claims getClaims(HttpServletRequest req) {
+        String tokenFromRequest = jwtUtil.getTokenFromRequest2(req);
         tokenFromRequest = jwtUtil.substringToken(tokenFromRequest);
         // 토큰 검증
         if (!jwtUtil.validateToken(tokenFromRequest)) {
