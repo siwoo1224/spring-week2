@@ -14,4 +14,10 @@ public class Message {
         this.data = null;
         this.message = null;
     }
+
+    public Message(StatusEnum status, String message, Object data) {
+        this.status = status;
+        this.data = data;
+        this.message = message;
+    }
 }

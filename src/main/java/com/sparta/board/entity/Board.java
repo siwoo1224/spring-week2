@@ -32,9 +32,10 @@ public class Board  extends Timestamped {
         this.contents = requestDto.getContents();
     }
 
-    public void update(BoardRequestDto requestDto) {
+    public void update(BoardRequestDto requestDto, String subject) {
         this.title = requestDto.getTitle();
-        this.name = requestDto.getName();
+        this.name = subject;
         this.contents = requestDto.getContents();
     }
+
 }

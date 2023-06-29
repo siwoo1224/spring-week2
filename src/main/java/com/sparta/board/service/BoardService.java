@@ -73,18 +73,19 @@ public class BoardService {
      * @return
      */
     @Transactional
-    public Long updateBoard(Long id, BoardRequestDto requestDto) {
+    public BoardResponseDto updateBoard(Long id, BoardRequestDto requestDto) {
         Claims info = getClaims(req);
 
         // 글 존재 유무
         Board board = findBoard(id);
         if (info.getSubject().equals(board.getName())) {
-            board.update(requestDto);
+            board.update(requestDto, info.getSubject());
+            board = boardRepository.save(board);
         }else{
             throw new IllegalArgumentException("작성자만 수정할 수 있다");
         }
 
-        return id;
+        return new BoardResponseDto(board);
     }
 
     /**
